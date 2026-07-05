@@ -1,0 +1,28 @@
+# FrankKi MCP
+
+> FrankKi MCP is the official Model Context Protocol server for FrankKi (https://frankki.app): physical mail for AI agents. With one tool call, an agent composes, prices, sends, and tracks a real, printed letter to a physical address anywhere in the world. Letters are printed and delivered by Deutsche Post together with local postal partners in each destination country. Hosted server, nothing to self-host.
+
+Key facts:
+- Endpoint: https://mcp.frankki.app/mcp (MCP streamable HTTP)
+- Registry name: app.frankki/frankki (Official MCP Registry)
+- Auth: OAuth 2.1 with dynamic client registration, or API key as bearer token
+- OAuth metadata: https://mcp.frankki.app/.well-known/oauth-authorization-server
+- Billing: prepaid wallet (Stripe top-up); a German domestic letter starts at 3,49 EUR, international priced per destination; call shipping_quote for live prices
+- Safety: per-key scopes and spending limits, maxCostEuros guard on sends, four-eyes human approval queue, sandbox mode with no real mail
+- Compliance: GoBD archiving, DATEV/DMS export, GDPR (EU data processing), German and English
+- Composition: text-first; FrankKi renders DIN 5008 letters; attachments supported; arbitrary pre-rendered PDFs as the letter are not supported
+- Audience: B2B and developers (agents, backends, automated workflows); consumer app available on iOS
+
+## Docs
+
+- [README](https://github.com/datPascal/frankki-mcp/blob/main/README.md): overview, quick starts, FAQ
+- [Tool reference](https://github.com/datPascal/frankki-mcp/blob/main/docs/tools.md): all tools with scopes and side effects
+- [Authentication](https://github.com/datPascal/frankki-mcp/blob/main/docs/authentication.md): OAuth 2.1, API keys, scope list
+- [Client setup](https://github.com/datPascal/frankki-mcp/blob/main/docs/clients.md): Claude Desktop, Claude Code, Cursor, VS Code, Windsurf, Zed, OpenAI Agents SDK, LangChain
+- [Use cases](https://github.com/datPascal/frankki-mcp/blob/main/docs/use-cases.md): dunning, terminations, compliance mail, onboarding
+
+## Links
+
+- [FrankKi homepage](https://frankki.app)
+- [MCP for humans and agents](https://frankki.app/mcp) ([English](https://frankki.app/en/mcp))
+- [Site llms.txt](https://frankki.app/llms.txt)

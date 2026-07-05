@@ -30,6 +30,7 @@ This is the official Model Context Protocol (MCP) server for [**FrankKi**](https
 - [Compliance](#compliance)
 - [How a send actually works](#how-a-send-actually-works)
 - [Discovery and server manifest](#discovery-and-server-manifest)
+- [Documentation](#documentation)
 - [FAQ](#faq)
 - [Links](#links)
 
@@ -56,20 +57,23 @@ Typical uses:
 
 ## What your agent can do
 
-The server exposes a focused set of tools. Names below are representative. The authoritative, versioned list is always what the server returns from the MCP `tools/list` method, and every tool carries annotations (`readOnlyHint`, `destructiveHint`) so an agent can reason about side effects before it acts.
+The server exposes a focused, scoped tool set. The core send flow:
 
 | Tool | What it does | Side effect |
 |------|--------------|-------------|
-| `search_addresses` | Look up and validate a recipient address in any supported country | read only |
-| `list_templates` | Browse reusable letter templates | read only |
-| `compose_letter` | Draft a professionally formatted letter from plain text plus a recipient, returns a preview | read only, creates a draft |
-| `estimate_price` | Get the exact price for a send to a given destination before committing | read only |
-| `get_wallet_balance` | Read the prepaid wallet balance | read only |
-| `send_letter` | Send one physical letter, charges the wallet | **spends money, mails paper** |
-| `send_batch` | Bulk send: one call, many recipients | **spends money, mails paper** |
-| `submit_for_approval` | Route a letter into the four-eyes approval queue instead of sending directly | queues, no send |
-| `get_order_status` | Track a letter through printed, posted, and delivered | read only |
-| `top_up_wallet` | Create a secure Stripe top-up link | creates a payment link |
+| `address_validate` | Validate a recipient address against destination-country postal rules | read only |
+| `address_search_company` | Look up a company's postal address by name | read only |
+| `template_list` | Browse reusable letter templates | read only |
+| `letter_create_draft` | Draft a professionally formatted letter from plain text plus a recipient, returns a preview | creates a draft, no send |
+| `shipping_quote` | Get the exact price for a send to a given destination before committing | read only |
+| `wallet_balance` | Read the prepaid wallet balance | read only |
+| `order_send` | Send one physical letter, charges the wallet; supports a `maxCostEuros` guard | **spends money, mails paper** |
+| `order_send_batch` | Bulk send: one call, many recipients with merge fields | **spends money, mails paper** |
+| `approval_submit` | Route a letter into the four-eyes approval queue instead of sending directly | queues, no send |
+| `order_status` | Track a letter through printed, posted, and delivered | read only |
+| `wallet_topup_link` | Create a secure Stripe top-up link | creates a payment link |
+
+Beyond the core flow there are tools for attachments, letterheads and signatures, sender profiles, send presets, scheduled sends, order cancellation, posting receipts (Einlieferungsbeleg), client (Mandanten) lookups, and GoBD/DATEV archive exports. The full list with scopes and side effects: **[docs/tools.md](docs/tools.md)**. The authoritative, versioned list is always what the server returns from the MCP `tools/list` method.
 
 Composition is text-first: you provide the letter content and the recipient, and FrankKi produces the correctly laid-out document (DIN 5008 by default). Attachments are supported. Sending a pre-rendered arbitrary PDF is intentionally not part of the platform.
 
@@ -120,7 +124,15 @@ You do not clone or self-host anything. The FrankKi MCP server is hosted. You po
 }
 ```
 
+**2d. Claude Code.** One command:
+
+```bash
+claude mcp add --transport http frankki https://mcp.frankki.app/mcp
+```
+
 Restart the client, and your model can now send letters. Ask it something like: *"Send this payment reminder to the address on file, but show me the price first."*
+
+Step-by-step guides for Cursor, VS Code, Windsurf, Zed, the OpenAI Agents SDK, and LangChain: **[docs/clients.md](docs/clients.md)**.
 
 ## Quick start for AI agents
 
@@ -149,8 +161,8 @@ const { tools } = await client.listTools();
 console.log(tools.map((t) => t.name));
 
 const price = await client.callTool({
-  name: "estimate_price",
-  arguments: { country: "US", registered: false },
+  name: "shipping_quote",
+  arguments: { recipientCountry: "US", deliveryType: "standard" },
 });
 ```
 
@@ -185,16 +197,16 @@ FrankKi runs on a **prepaid wallet**. You top it up (via Stripe), and each send 
 - Registered mail and other service levels are available where the destination supports them.
 - Volume tiers (**Staffelpreise**) reduce the per-letter price at scale.
 
-Always call `estimate_price` for the live, exact figure before `send_letter`. Prices are authoritative from the server, never hardcode them.
+Always call `shipping_quote` for the live, exact figure before `order_send`. Prices are authoritative from the server, never hardcode them.
 
 ## Safety and human-in-the-loop
 
 Sending physical mail is irreversible and costs money, so the platform is cautious by default:
 
-- **Honest annotations.** `send_letter` and `send_batch` are marked `destructiveHint: true`. Read tools are `readOnlyHint: true`. Your agent can gate on this.
-- **Approval queue.** Route sensitive letters through `submit_for_approval` for a **four-eyes** human check before anything is printed. Every decision is logged.
+- **Honest annotations.** `order_send` and `order_send_batch` are annotated as destructive; read tools as read-only. Your agent can gate on this, and `order_send` accepts a `maxCostEuros` cap that aborts the send if the live price exceeds it.
+- **Approval queue.** Route sensitive letters through `approval_submit` for a **four-eyes** human check before anything is printed. Every decision is logged.
 - **Per-key spending limits and tool scopes.** Cap what an automated key can spend, and restrict which tools it may call.
-- **Preview before commit.** `compose_letter` returns a rendered preview and `estimate_price` returns the cost, so an agent or a human can confirm before `send_letter`.
+- **Preview before commit.** `letter_create_draft` returns a rendered preview and `shipping_quote` returns the cost, so an agent or a human can confirm before `order_send`.
 
 ## Sandbox
 
@@ -211,31 +223,27 @@ Enterprise and EU-grade, for teams that need it:
 
 ## How a send actually works
 
-1. Your agent calls `compose_letter` with the text and a recipient. FrankKi renders a professionally formatted document.
-2. `estimate_price` returns the exact cost for that destination. The agent, or a human via the approval queue, confirms.
-3. `send_letter` charges the prepaid wallet atomically and hands the job to fulfillment.
+1. Your agent calls `letter_create_draft` with the text and a recipient. FrankKi renders a professionally formatted document.
+2. `shipping_quote` returns the exact cost for that destination. The agent, or a human via the approval queue, confirms.
+3. `order_send` charges the prepaid wallet atomically and hands the job to fulfillment.
 4. FrankKi prints the letter and hands it off for delivery worldwide via Deutsche Post and local postal partners.
-5. Status flows back through `get_order_status`: printed, posted, and, where supported, delivered.
+5. Status flows back through `order_status`: printed, posted, and, where supported, delivered. `order_einlieferungsbeleg` returns the posting receipt.
 
 ## Discovery and server manifest
 
-For directories and registries, this repo publishes a `server.json` (Official MCP Registry schema). Representative shape:
-
-```json
-{
-  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
-  "name": "app.frankki/frankki",
-  "description": "Physical mail for AI agents. Send real, printed letters to any address, delivered worldwide.",
-  "version": "1.0.0",
-  "websiteUrl": "https://frankki.app/mcp",
-  "repository": { "url": "https://github.com/frankki-app/frankki-mcp", "source": "github" },
-  "remotes": [
-    { "type": "streamable-http", "url": "https://mcp.frankki.app/mcp" }
-  ]
-}
-```
+For directories and registries, this repo publishes [`server.json`](server.json) (Official MCP Registry schema, name `app.frankki/frankki`) and a repo-level [`llms.txt`](llms.txt) for AI-assisted discovery.
 
 Found this server through an MCP directory? The canonical source of truth is always **[frankki.app/mcp](https://frankki.app/mcp)**.
+
+## Documentation
+
+| Doc | Contents |
+|-----|----------|
+| [docs/tools.md](docs/tools.md) | Every tool with scope, side effects, the canonical send flow, and error codes |
+| [docs/authentication.md](docs/authentication.md) | OAuth 2.1, API keys, the full scope list, recommended setups |
+| [docs/clients.md](docs/clients.md) | Setup for Claude Desktop, Claude Code, Cursor, VS Code, Windsurf, Zed, OpenAI Agents SDK, LangChain |
+| [docs/use-cases.md](docs/use-cases.md) | Dunning, terminations, compliance mail, onboarding, agent-native products |
+| [examples/](examples/) | Runnable TypeScript and Python clients (sandbox-first, send behind an explicit flag) |
 
 ## FAQ
 
@@ -243,7 +251,7 @@ Found this server through an MCP directory? The canonical source of truth is alw
 Real paper. It is printed, franked, and delivered by postal partners. This is not email.
 
 **Which countries can it deliver to?**
-Worldwide. Use `estimate_price` to confirm reach and cost for a specific destination.
+Worldwide. Use `shipping_quote` to confirm reach and cost for a specific destination.
 
 **Do I host the server?**
 No. FrankKi hosts it. This repo is documentation, `server.json`, and examples. You connect a client or agent to the hosted endpoint.
