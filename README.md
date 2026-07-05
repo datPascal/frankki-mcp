@@ -1,25 +1,25 @@
-<!-- Repo: frankki-mcp | Homepage: https://frankki.app/mcp | Topics: mcp, mcp-server, claude, ai-agents, letters, germany -->
+<!-- Repo: frankki-mcp | Homepage: https://frankki.app/mcp | Topics: mcp, mcp-server, claude, ai-agents, physical-mail, letters -->
 
 # FrankKi MCP
 
-**Let any AI agent send a real, physical letter.** FrankKi turns a single tool call into paper in a mailbox: composed to the German DIN 5008 standard, printed, franked, and handed to Deutsche Post and local postal partners for delivery across Germany and worldwide.
+**Physical mail for AI agents.** With one tool call, FrankKi MCP lets an agent send a real, printed letter to a physical address anywhere in the world. Compose, price, send, and track. The document is printed, franked, and delivered by postal partners worldwide.
 
-This is the official Model Context Protocol (MCP) server for [**FrankKi**](https://frankki.app). Connect it to Claude, Cursor, or your own agent runtime and your model gains one new, very physical capability: it can put a letter in the post.
+This is the official Model Context Protocol (MCP) server for [**FrankKi**](https://frankki.app). It is built for B2B and developer use: give your agents, backends, and automated workflows the ability to put real letters in the mail, at scale, worldwide.
 
-> Website: **[frankki.app](https://frankki.app)** · MCP landing page: **[frankki.app/mcp](https://frankki.app/mcp)** (English: **[frankki.app/en/mcp](https://frankki.app/en/mcp)**)
+> Website: **[frankki.app](https://frankki.app)** · MCP for humans and agents: **[frankki.app/mcp](https://frankki.app/mcp)** (English: **[frankki.app/en/mcp](https://frankki.app/en/mcp)**)
 
 ![Status](https://img.shields.io/badge/status-public%20beta-d97757)
 ![MCP](https://img.shields.io/badge/protocol-MCP-blue)
+![Delivery](https://img.shields.io/badge/delivery-worldwide-brightgreen)
 ![Transport](https://img.shields.io/badge/transport-streamable%20HTTP-informational)
 ![Auth](https://img.shields.io/badge/auth-OAuth%202.1%20%7C%20API%20key-green)
-![License](https://img.shields.io/badge/docs-MIT-lightgrey)
 
 ---
 
 ## Contents
 
-- [What is FrankKi?](#what-is-frankki)
-- [Why an MCP server for letters?](#why-an-mcp-server-for-letters)
+- [What is FrankKi MCP?](#what-is-frankki-mcp)
+- [Why physical mail via MCP?](#why-physical-mail-via-mcp)
 - [What your agent can do](#what-your-agent-can-do)
 - [Quick start for humans](#quick-start-for-humans)
 - [Quick start for AI agents](#quick-start-for-ai-agents)
@@ -35,42 +35,49 @@ This is the official Model Context Protocol (MCP) server for [**FrankKi**](https
 
 ---
 
-## What is FrankKi?
+## What is FrankKi MCP?
 
-[FrankKi](https://frankki.app) is a German letter service that writes, prints, and physically mails letters for you. People use it to answer a letter from an Amt, send a Kündigung, mail an Einschreiben, or handle any correspondence that still has to arrive on paper. It runs as a native iOS app and, now, as an MCP server so that software agents can do the same thing programmatically.
+FrankKi MCP is the agent-native interface to [FrankKi](https://frankki.app)'s physical mail infrastructure. FrankKi composes, prints, and physically mails letters. This server exposes that capability to software: your model drafts a letter and sends it, and a real document arrives at the recipient's address.
 
-Every letter is formatted to **DIN 5008**, printed on real paper, and delivered **per Post** by Deutsche Post together with local postal partners in the destination country. Learn more at **[frankki.app](https://frankki.app)**.
+Delivery is **worldwide**, handled by Deutsche Post together with local postal partners in each destination country. It is primarily a **B2B and developer product**: if you are building an assistant, an ops automation, or a backend that needs to produce and dispatch physical correspondence, this is your physical-output layer.
 
-## Why an MCP server for letters?
+## Why physical mail via MCP?
 
-Plenty of workflows still dead-end at "and now a human has to print this and walk to a postbox." Registered cancellations, objections to authorities, tenancy notices, reminders, and formal confirmations often only count when they arrive physically. FrankKi MCP closes that gap: the last mile of an automated workflow can now be an actual letter, initiated by the same agent that drafted it.
+Some things still have to arrive on paper: formal and legal notices, transactional and compliance mail, contract confirmations, dunning and reminders, customer onboarding, official correspondence. These workflows usually dead-end at "now a human prints this and walks to a postbox." FrankKi MCP removes that step. The same agent that drafts the letter can send it, worldwide, and track delivery.
 
-If you are building an assistant that helps people deal with German bureaucracy, an ops bot that dispatches formal notices, or an internal tool that mails documents, this server is the physical-output layer you were missing.
+Typical uses:
+
+- Dunning and payment reminders
+- Cancellations, terminations, objections, and other formal notices
+- Contract and order confirmations
+- Customer and account notifications
+- Onboarding and welcome letters
+- Any workflow whose last step must be a physical letter
 
 ## What your agent can do
 
-The server exposes a focused set of tools. Names below are representative. The authoritative, versioned list is always what the server returns from the MCP `tools/list` method, and every tool carries annotations (`readOnlyHint`, `destructiveHint`) so your agent can reason about side effects before it acts.
+The server exposes a focused set of tools. Names below are representative. The authoritative, versioned list is always what the server returns from the MCP `tools/list` method, and every tool carries annotations (`readOnlyHint`, `destructiveHint`) so an agent can reason about side effects before it acts.
 
 | Tool | What it does | Side effect |
 |------|--------------|-------------|
-| `search_addresses` | Look up and validate a recipient address (German and international format) | read only |
-| `list_templates` | Browse reusable letter templates (Kündigung, Widerspruch, and more) | read only |
-| `compose_letter` | Draft a DIN 5008 letter from plain text plus a recipient, returns a preview | read only, creates a draft |
-| `estimate_price` | Get the exact price for a send before committing | read only |
+| `search_addresses` | Look up and validate a recipient address in any supported country | read only |
+| `list_templates` | Browse reusable letter templates | read only |
+| `compose_letter` | Draft a professionally formatted letter from plain text plus a recipient, returns a preview | read only, creates a draft |
+| `estimate_price` | Get the exact price for a send to a given destination before committing | read only |
 | `get_wallet_balance` | Read the prepaid wallet balance | read only |
 | `send_letter` | Send one physical letter, charges the wallet | **spends money, mails paper** |
-| `send_batch` | Sammelversand: one call, many recipients | **spends money, mails paper** |
+| `send_batch` | Bulk send: one call, many recipients | **spends money, mails paper** |
 | `submit_for_approval` | Route a letter into the four-eyes approval queue instead of sending directly | queues, no send |
 | `get_order_status` | Track a letter through printed, posted, and delivered | read only |
-| `top_up_wallet` | Create a secure Stripe top-up link (10 to 500 EUR) | creates a payment link |
+| `top_up_wallet` | Create a secure Stripe top-up link | creates a payment link |
 
-Composition is text-first: you give FrankKi the letter content and the recipient, and it produces the correctly laid-out document. Attachments are supported. Sending a pre-rendered arbitrary PDF is intentionally not part of the platform.
+Composition is text-first: you provide the letter content and the recipient, and FrankKi produces the correctly laid-out document (DIN 5008 by default). Attachments are supported. Sending a pre-rendered arbitrary PDF is intentionally not part of the platform.
 
 ## Quick start for humans
 
 You do not clone or self-host anything. The FrankKi MCP server is hosted. You point your MCP client at it and authenticate.
 
-**1. Get access.** Create a partner account and issue a key from the dashboard at **[frankki.app/mcp](https://frankki.app/mcp)**. Fund your wallet (or use the [sandbox](#sandbox) first, no real mail).
+**1. Get access.** Create a partner account and issue a key from the dashboard at **[frankki.app/mcp](https://frankki.app/mcp)**. Fund your wallet, or use the [sandbox](#sandbox) first (no real mail).
 
 **2a. Claude Desktop and clients with native remote support.** Add a custom connector pointing at the endpoint. OAuth runs in your browser on first use:
 
@@ -113,7 +120,7 @@ You do not clone or self-host anything. The FrankKi MCP server is hosted. You po
 }
 ```
 
-Restart the client, and your model can now send letters. Ask it something like: *"Draft a friendly reminder to this address and mail it, but show me the price first."*
+Restart the client, and your model can now send letters. Ask it something like: *"Send this payment reminder to the address on file, but show me the price first."*
 
 ## Quick start for AI agents
 
@@ -143,7 +150,7 @@ console.log(tools.map((t) => t.name));
 
 const price = await client.callTool({
   name: "estimate_price",
-  arguments: { country: "DE", registered: false },
+  arguments: { country: "US", registered: false },
 });
 ```
 
@@ -167,27 +174,27 @@ async with streamablehttp_client(url, headers=headers) as (read, write, _):
 
 Two modes, pick per client:
 
-- **OAuth 2.1** for interactive clients (Claude Desktop, IDEs). The consent screen shows what the agent is allowed to do, and read-only scopes are granted by default. Best for end users connecting their own FrankKi account.
+- **OAuth 2.1** for interactive clients (Claude Desktop, IDEs). The consent screen shows what the agent is allowed to do, and read-only scopes are granted by default. Best when an end user connects their own FrankKi account.
 - **API key** (bearer token) for headless agents, servers, and CI. Issue and rotate keys in the dashboard. Each key can carry a spending limit and an allowed-tools scope, so a key that may look up prices does not have to be a key that may spend money.
 
 ## Wallet and pricing
 
-FrankKi runs on a **prepaid wallet**. You top it up (10 to 500 EUR per top-up, via Stripe), and each send draws from the balance. No surprise post-paid invoices, and an out-of-credit agent simply cannot spend.
+FrankKi runs on a **prepaid wallet**. You top it up (via Stripe), and each send draws from the balance. No surprise post-paid invoices, and an out-of-credit agent simply cannot spend.
 
-- Standard letter within Germany: **from 3,49 EUR**.
-- Registered mail (**Einschreiben**) and international sending are available at their own rates.
+- Pricing depends on the **destination country**. A domestic letter within Germany starts at **3,49 EUR**; international sends are priced per destination.
+- Registered mail and other service levels are available where the destination supports them.
 - Volume tiers (**Staffelpreise**) reduce the per-letter price at scale.
 
 Always call `estimate_price` for the live, exact figure before `send_letter`. Prices are authoritative from the server, never hardcode them.
 
 ## Safety and human-in-the-loop
 
-Sending physical mail is irreversible and costs money, so the platform is built to be cautious by default:
+Sending physical mail is irreversible and costs money, so the platform is cautious by default:
 
 - **Honest annotations.** `send_letter` and `send_batch` are marked `destructiveHint: true`. Read tools are `readOnlyHint: true`. Your agent can gate on this.
 - **Approval queue.** Route sensitive letters through `submit_for_approval` for a **four-eyes** human check before anything is printed. Every decision is logged.
 - **Per-key spending limits and tool scopes.** Cap what an automated key can spend, and restrict which tools it may call.
-- **Preview before commit.** `compose_letter` returns a rendered preview and `estimate_price` returns the cost, so an agent (or a human) can confirm before `send_letter`.
+- **Preview before commit.** `compose_letter` returns a rendered preview and `estimate_price` returns the cost, so an agent or a human can confirm before `send_letter`.
 
 ## Sandbox
 
@@ -195,20 +202,20 @@ Test the full flow without mailing anything. Request a **sandbox key** from the 
 
 ## Compliance
 
-Built for German and EU requirements:
+Enterprise and EU-grade, for teams that need it:
 
 - **GoBD-compliant** archiving of every send, with retrievable receipts.
 - **DATEV** and generic **DMS** exports for accounting and document management.
 - **DSGVO / GDPR**: letter data is processed in the EU.
-- German-first support, with the platform and its messages available in **German and English**.
+- Platform and messages available in **English and German**.
 
 ## How a send actually works
 
-1. Your agent calls `compose_letter` with the text and a recipient. FrankKi renders a DIN 5008 document.
-2. `estimate_price` returns the exact cost. The agent (or a human via the approval queue) confirms.
+1. Your agent calls `compose_letter` with the text and a recipient. FrankKi renders a professionally formatted document.
+2. `estimate_price` returns the exact cost for that destination. The agent, or a human via the approval queue, confirms.
 3. `send_letter` charges the prepaid wallet atomically and hands the job to fulfillment.
-4. FrankKi prints the letter and hands it off for delivery **per Post** via Deutsche Post and local postal partners.
-5. Status flows back through `get_order_status`: printed, posted, and (for tracked mail) delivered.
+4. FrankKi prints the letter and hands it off for delivery worldwide via Deutsche Post and local postal partners.
+5. Status flows back through `get_order_status`: printed, posted, and, where supported, delivered.
 
 ## Discovery and server manifest
 
@@ -218,7 +225,7 @@ For directories and registries, this repo publishes a `server.json` (Official MC
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
   "name": "app.frankki/frankki",
-  "description": "Send real, physical letters from any AI agent. Delivered per Post in Germany and worldwide.",
+  "description": "Physical mail for AI agents. Send real, printed letters to any address, delivered worldwide.",
   "version": "1.0.0",
   "websiteUrl": "https://frankki.app/mcp",
   "repository": { "url": "https://github.com/frankki-app/frankki-mcp", "source": "github" },
@@ -233,16 +240,16 @@ Found this server through an MCP directory? The canonical source of truth is alw
 ## FAQ
 
 **Is the letter really printed and mailed, or is it email?**
-Real paper. It is printed, franked, and delivered by Deutsche Post and local postal partners. This is not email.
+Real paper. It is printed, franked, and delivered by postal partners. This is not email.
 
-**Which countries?**
-Germany plus worldwide destinations. Use `estimate_price` to confirm reach and cost for a given country.
+**Which countries can it deliver to?**
+Worldwide. Use `estimate_price` to confirm reach and cost for a specific destination.
 
 **Do I host the server?**
 No. FrankKi hosts it. This repo is documentation, `server.json`, and examples. You connect a client or agent to the hosted endpoint.
 
-**Can it send registered mail?**
-Yes, Einschreiben is supported for German sends.
+**Is this for consumers or businesses?**
+Primarily B2B and developer use: agents, backends, and automated workflows that need to dispatch physical mail at scale.
 
 **What if my agent goes rogue?**
 It cannot spend beyond the wallet balance or a key's spending limit, sensitive letters can be forced through a human approval queue, and destructive tools are clearly annotated. Start in the [sandbox](#sandbox).
@@ -260,6 +267,4 @@ Yes, FrankKi also exposes a REST API. The MCP server is the agent-native front d
 
 ---
 
-Made by the team behind **[FrankKi](https://frankki.app)**, the app that mails your letters so you do not have to find a printer, an envelope, and a postbox.
-
-*Docs and examples in this repo are MIT licensed. Use of the hosted FrankKi MCP service is governed by the terms at [frankki.app](https://frankki.app).*
+Built by the team behind **[FrankKi](https://frankki.app)**: physical mail infrastructure for software, so your agents and workflows can send real letters worldwide without ever touching a printer.
