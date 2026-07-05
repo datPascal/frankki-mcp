@@ -1,0 +1,17 @@
+{
+  "name": "frankki-mcp-example",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Example: send a physical letter from a TypeScript agent via the FrankKi MCP server",
+  "type": "module",
+  "scripts": {
+    "start": "tsx send-letter.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  }
+}

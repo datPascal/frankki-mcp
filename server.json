@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "app.frankki/frankki",
+  "description": "Physical mail for AI agents. Send real, printed letters to any address, delivered worldwide.",
+  "status": "active",
+  "version": "1.0.0",
+  "websiteUrl": "https://frankki.app/mcp",
+  "repository": {
+    "url": "https://github.com/datPascal/frankki-mcp",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.frankki.app/mcp"
+    }
+  ]
+}
