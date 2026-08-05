@@ -1,10 +1,10 @@
 {
-  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "app.frankki/frankki",
+  "title": "FrankKi",
   "description": "Physical mail for AI agents. Send real, printed letters to any address, delivered worldwide.",
-  "status": "active",
   "version": "1.0.0",
-  "websiteUrl": "https://frankki.app/mcp",
+  "websiteUrl": "https://frankki.app/en/mcp",
   "repository": {
     "url": "https://github.com/datPascal/frankki-mcp",
     "source": "github"
@@ -12,7 +12,7 @@
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://mcp.frankki.app/mcp"
+      "url": "https://mcp.frankki.app"
     }
   ]
 }
