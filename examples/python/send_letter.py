@@ -16,7 +16,7 @@ import os
 from mcp import ClientSession
 from mcp.client.streamable_http import streamablehttp_client
 
-ENDPOINT = "https://mcp.frankki.app/mcp"
+ENDPOINT = "https://mcp.frankki.app"
 SEND_FOR_REAL = False  # flip to True to actually charge the wallet and mail paper
 
 RECIPIENT = {

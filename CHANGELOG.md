@@ -11,7 +11,7 @@ Notable changes to the FrankKi MCP server and this repository. The authoritative
 
 ## 2026 — Platform (highlights)
 
-- **Public beta** of the hosted MCP server at `https://mcp.frankki.app/mcp` (streamable HTTP).
+- **Public beta** of the hosted MCP server at `https://mcp.frankki.app` (streamable HTTP).
 - OAuth 2.1 with dynamic client registration alongside scoped API keys.
 - Worldwide delivery with per-destination live pricing (`shipping_quote`).
 - Four-eyes approval queue, per-key spending limits, `maxCostEuros` send guard.

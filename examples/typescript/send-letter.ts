@@ -11,7 +11,7 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 
-const ENDPOINT = "https://mcp.frankki.app/mcp";
+const ENDPOINT = "https://mcp.frankki.app";
 const SEND_FOR_REAL = false; // flip to true to actually charge the wallet and mail paper
 
 async function main() {

@@ -21,7 +21,7 @@ The server implements the standard MCP authorization flow: OAuth 2.1 with PKCE a
 No client credentials to manage, nothing to configure server-side. If your client asks for a "custom connector" or "remote MCP server" URL, that URL is:
 
 ```
-https://mcp.frankki.app/mcp
+https://mcp.frankki.app
 ```
 
 ## API keys (headless agents)

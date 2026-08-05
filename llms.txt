@@ -3,8 +3,8 @@
 > FrankKi MCP is the official Model Context Protocol server for FrankKi (https://frankki.app): physical mail for AI agents. With one tool call, an agent composes, prices, sends, and tracks a real, printed letter to a physical address anywhere in the world. Letters are printed and delivered by Deutsche Post together with local postal partners in each destination country. Hosted server, nothing to self-host.
 
 Key facts:
-- Endpoint: https://mcp.frankki.app/mcp (MCP streamable HTTP)
-- Registry name: app.frankki/frankki (Official MCP Registry)
+- Endpoint: https://mcp.frankki.app (MCP streamable HTTP)
+- Registry name: app.frankki/frankki (server.json name; registry listing pending)
 - Auth: OAuth 2.1 with dynamic client registration, or API key as bearer token
 - OAuth metadata: https://mcp.frankki.app/.well-known/oauth-authorization-server
 - Billing: prepaid wallet (Stripe top-up); a German domestic letter starts at 3,49 EUR, international priced per destination; call shipping_quote for live prices

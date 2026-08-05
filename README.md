@@ -89,7 +89,7 @@ You do not clone or self-host anything. The FrankKi MCP server is hosted. You po
 {
   "mcpServers": {
     "frankki": {
-      "url": "https://mcp.frankki.app/mcp"
+      "url": "https://mcp.frankki.app"
     }
   }
 }
@@ -102,7 +102,7 @@ You do not clone or self-host anything. The FrankKi MCP server is hosted. You po
   "mcpServers": {
     "frankki": {
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.frankki.app/mcp"]
+      "args": ["-y", "mcp-remote", "https://mcp.frankki.app"]
     }
   }
 }
@@ -116,7 +116,7 @@ You do not clone or self-host anything. The FrankKi MCP server is hosted. You po
     "frankki": {
       "command": "npx",
       "args": [
-        "-y", "mcp-remote", "https://mcp.frankki.app/mcp",
+        "-y", "mcp-remote", "https://mcp.frankki.app",
         "--header", "Authorization: Bearer ${FRANKKI_API_KEY}"
       ]
     }
@@ -127,7 +127,7 @@ You do not clone or self-host anything. The FrankKi MCP server is hosted. You po
 **2d. Claude Code.** One command:
 
 ```bash
-claude mcp add --transport http frankki https://mcp.frankki.app/mcp
+claude mcp add --transport http frankki https://mcp.frankki.app
 ```
 
 Restart the client, and your model can now send letters. Ask it something like: *"Send this payment reminder to the address on file, but show me the price first."*
@@ -138,8 +138,8 @@ Step-by-step guides for Cursor, VS Code, Windsurf, Zed, the OpenAI Agents SDK, a
 
 The server is standard **streamable HTTP** MCP. Discovery, endpoint, and auth in one place:
 
-- **Endpoint:** `https://mcp.frankki.app/mcp`
-- **Registry name:** `app.frankki/frankki` (Official MCP Registry)
+- **Endpoint:** `https://mcp.frankki.app`
+- **Registry name:** `app.frankki/frankki` (server.json name; registry listing pending)
 - **Auth metadata:** `https://mcp.frankki.app/.well-known/oauth-authorization-server` (OAuth 2.1, dynamic client registration) or a static bearer API key
 - **Machine-readable overview:** `https://frankki.app/llms.txt`
 
@@ -150,7 +150,7 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 
 const transport = new StreamableHTTPClientTransport(
-  new URL("https://mcp.frankki.app/mcp"),
+  new URL("https://mcp.frankki.app"),
   { requestInit: { headers: { Authorization: `Bearer ${process.env.FRANKKI_API_KEY}` } } }
 );
 
@@ -172,7 +172,7 @@ const price = await client.callTool({
 from mcp import ClientSession
 from mcp.client.streamable_http import streamablehttp_client
 
-url = "https://mcp.frankki.app/mcp"
+url = "https://mcp.frankki.app"
 headers = {"Authorization": f"Bearer {FRANKKI_API_KEY}"}
 
 async with streamablehttp_client(url, headers=headers) as (read, write, _):
@@ -270,7 +270,7 @@ Yes, FrankKi also exposes a REST API. The MCP server is the agent-native front d
 - **Homepage:** https://frankki.app
 - **MCP for humans and agents:** https://frankki.app/mcp · https://frankki.app/en/mcp
 - **Machine-readable overview:** https://frankki.app/llms.txt
-- **Endpoint:** https://mcp.frankki.app/mcp
+- **Endpoint:** https://mcp.frankki.app
 - **Registry name:** `app.frankki/frankki`
 
 ---

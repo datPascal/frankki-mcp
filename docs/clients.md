@@ -3,7 +3,7 @@
 FrankKi MCP is a hosted, remote MCP server speaking **streamable HTTP**. There is nothing to install or run locally; every guide below just points a client at:
 
 ```
-https://mcp.frankki.app/mcp
+https://mcp.frankki.app
 ```
 
 Interactive clients use OAuth (a browser window opens on first use). Headless setups pass an API key as a bearer header. See [authentication.md](authentication.md).
@@ -29,7 +29,7 @@ Or via `claude_desktop_config.json`:
 {
   "mcpServers": {
     "frankki": {
-      "url": "https://mcp.frankki.app/mcp"
+      "url": "https://mcp.frankki.app"
     }
   }
 }
@@ -42,13 +42,13 @@ Older Claude Desktop builds without native remote support: use the [mcp-remote b
 One command:
 
 ```bash
-claude mcp add --transport http frankki https://mcp.frankki.app/mcp
+claude mcp add --transport http frankki https://mcp.frankki.app
 ```
 
 Headless (CI, agents) with an API key:
 
 ```bash
-claude mcp add --transport http frankki https://mcp.frankki.app/mcp \
+claude mcp add --transport http frankki https://mcp.frankki.app \
   --header "Authorization: Bearer ${FRANKKI_API_KEY}"
 ```
 
@@ -56,7 +56,7 @@ Then in a session: *"Quote me the price of a registered letter to an address in 
 
 ## Claude (web and mobile)
 
-Settings → Connectors → **Add custom connector** → paste `https://mcp.frankki.app/mcp`. Requires a Claude plan with custom connector support.
+Settings → Connectors → **Add custom connector** → paste `https://mcp.frankki.app`. Requires a Claude plan with custom connector support.
 
 ## Cursor
 
@@ -66,7 +66,7 @@ Settings → MCP → **Add new MCP server**, or add to `.cursor/mcp.json` (proje
 {
   "mcpServers": {
     "frankki": {
-      "url": "https://mcp.frankki.app/mcp"
+      "url": "https://mcp.frankki.app"
     }
   }
 }
@@ -78,7 +78,7 @@ With an API key, add a `headers` object:
 {
   "mcpServers": {
     "frankki": {
-      "url": "https://mcp.frankki.app/mcp",
+      "url": "https://mcp.frankki.app",
       "headers": {
         "Authorization": "Bearer ${FRANKKI_API_KEY}"
       }
@@ -96,7 +96,7 @@ Command palette → **MCP: Add Server** → HTTP, or add to `.vscode/mcp.json`:
   "servers": {
     "frankki": {
       "type": "http",
-      "url": "https://mcp.frankki.app/mcp"
+      "url": "https://mcp.frankki.app"
     }
   }
 }
@@ -110,7 +110,7 @@ Add to `~/.codeium/windsurf/mcp_config.json`:
 {
   "mcpServers": {
     "frankki": {
-      "serverUrl": "https://mcp.frankki.app/mcp"
+      "serverUrl": "https://mcp.frankki.app"
     }
   }
 }
@@ -126,7 +126,7 @@ Settings → open `settings.json` and add:
     "frankki": {
       "source": "custom",
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.frankki.app/mcp"]
+      "args": ["-y", "mcp-remote", "https://mcp.frankki.app"]
     }
   }
 }
@@ -141,7 +141,7 @@ from agents.mcp import MCPServerStreamableHttp
 
 async with MCPServerStreamableHttp(
     params={
-        "url": "https://mcp.frankki.app/mcp",
+        "url": "https://mcp.frankki.app",
         "headers": {"Authorization": f"Bearer {FRANKKI_API_KEY}"},
     }
 ) as frankki:
@@ -162,7 +162,7 @@ from langchain_mcp_adapters.client import MultiServerMCPClient
 client = MultiServerMCPClient({
     "frankki": {
         "transport": "streamable_http",
-        "url": "https://mcp.frankki.app/mcp",
+        "url": "https://mcp.frankki.app",
         "headers": {"Authorization": f"Bearer {FRANKKI_API_KEY}"},
     }
 })
@@ -178,7 +178,7 @@ For clients that only launch local stdio servers, bridge with [`mcp-remote`](htt
   "mcpServers": {
     "frankki": {
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.frankki.app/mcp"]
+      "args": ["-y", "mcp-remote", "https://mcp.frankki.app"]
     }
   }
 }
@@ -192,7 +192,7 @@ With an API key (skips the OAuth browser flow):
     "frankki": {
       "command": "npx",
       "args": [
-        "-y", "mcp-remote", "https://mcp.frankki.app/mcp",
+        "-y", "mcp-remote", "https://mcp.frankki.app",
         "--header", "Authorization: Bearer ${FRANKKI_API_KEY}"
       ]
     }
