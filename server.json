@@ -1,8 +1,8 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "app.frankki/frankki",
+  "name": "app.frankki/letters",
   "title": "FrankKi",
-  "description": "Physical mail for AI agents. Send real, printed letters to any address, delivered worldwide.",
+  "description": "The agentic layer of letters. Agents send real printed mail worldwide, German compliance built in.",
   "version": "1.0.0",
   "websiteUrl": "https://frankki.app/en/mcp",
   "repository": {

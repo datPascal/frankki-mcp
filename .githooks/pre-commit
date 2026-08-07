@@ -1,0 +1,47 @@
+#!/bin/sh
+# MCP registry namespace invariant.
+#
+# The server name was two different strings in two documents until 2026-08-06.
+# The decision is app.frankki/letters. Rationale and runbook:
+#   ../AgentsUpdate/MCPDistribution/05-registry-namespace-decision.md
+#   (sibling directory in the FrankKi workspace, not part of this repo)
+#
+# Checks named files only, so a document that quotes the superseded strings
+# deliberately does not trip it.
+#
+# Install: git config core.hooksPath .githooks
+
+set -e
+
+FILES="server.json llms.txt README.md CHANGELOG.md"
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+FAILED=0
+
+for f in $FILES; do
+  [ -f "$REPO_ROOT/$f" ] || continue
+  if grep -n 'app\.frankki/frankki\|app\.frankki/mcp' "$REPO_ROOT/$f"; then
+    echo "  ^ $f carries a superseded MCP registry name."
+    FAILED=1
+  fi
+done
+
+if [ "$FAILED" -ne 0 ]; then
+  cat <<'EOF'
+
+Commit blocked: the MCP registry server name must be app.frankki/letters.
+
+  app.frankki/frankki  (superseded 2026-08-06)
+  app.frankki/mcp      (superseded 2026-08-06, playbook 00, stale)
+
+Publishing under a name is immutable per version, so a stray string here is not
+a cosmetic defect. If you are deliberately changing the decision, update
+05-registry-namespace-decision.md, this hook, and the matching hook in the
+Backend repo together.
+
+Override for a one-off: git commit --no-verify
+EOF
+  exit 1
+fi
+
+exit 0

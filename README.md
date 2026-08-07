@@ -2,13 +2,15 @@
 
 # FrankKi MCP
 
+**Hosted, remote MCP server. Nothing to install, nothing to self-host.** Point your agent at **`https://mcp.frankki.app`** (remote, streamable-http, OAuth 2.1 or API key). This repository is the public manifest, documentation and changelog for that server; the server itself is closed-source and runs on our own infrastructure, which is why there is no `src/` directory here.
+
 **Physical mail for AI agents.** With one tool call, FrankKi MCP lets an agent send a real, printed letter to a physical address anywhere in the world. Compose, price, send, and track. The document is printed, franked, and delivered by postal partners worldwide.
 
 This is the official Model Context Protocol (MCP) server for [**FrankKi**](https://frankki.app). It is built for B2B and developer use: give your agents, backends, and automated workflows the ability to put real letters in the mail, at scale, worldwide.
 
 > Website: **[frankki.app](https://frankki.app)** · MCP for humans and agents: **[frankki.app/mcp](https://frankki.app/mcp)** (English: **[frankki.app/en/mcp](https://frankki.app/en/mcp)**)
 
-![Status](https://img.shields.io/badge/status-public%20beta-d97757)
+![Status](https://img.shields.io/badge/status-public-d97757)
 ![MCP](https://img.shields.io/badge/protocol-MCP-blue)
 ![Delivery](https://img.shields.io/badge/delivery-worldwide-brightgreen)
 ![Transport](https://img.shields.io/badge/transport-streamable%20HTTP-informational)
@@ -139,7 +141,7 @@ Step-by-step guides for Cursor, VS Code, Windsurf, Zed, the OpenAI Agents SDK, a
 The server is standard **streamable HTTP** MCP. Discovery, endpoint, and auth in one place:
 
 - **Endpoint:** `https://mcp.frankki.app`
-- **Registry name:** `app.frankki/frankki` (server.json name; registry listing pending)
+- **Registry name:** `app.frankki/letters` (server.json name; registry listing pending)
 - **Auth metadata:** `https://mcp.frankki.app/.well-known/oauth-authorization-server` (OAuth 2.1, dynamic client registration) or a static bearer API key
 - **Machine-readable overview:** `https://frankki.app/llms.txt`
 
@@ -231,7 +233,7 @@ Enterprise and EU-grade, for teams that need it:
 
 ## Discovery and server manifest
 
-For directories and registries, this repo publishes [`server.json`](server.json) (Official MCP Registry schema, name `app.frankki/frankki`) and a repo-level [`llms.txt`](llms.txt) for AI-assisted discovery.
+For directories and registries, this repo publishes [`server.json`](server.json) (Official MCP Registry schema, name `app.frankki/letters`) and a repo-level [`llms.txt`](llms.txt) for AI-assisted discovery.
 
 Found this server through an MCP directory? The canonical source of truth is always **[frankki.app/mcp](https://frankki.app/mcp)**.
 
@@ -271,7 +273,7 @@ Yes, FrankKi also exposes a REST API. The MCP server is the agent-native front d
 - **MCP for humans and agents:** https://frankki.app/mcp · https://frankki.app/en/mcp
 - **Machine-readable overview:** https://frankki.app/llms.txt
 - **Endpoint:** https://mcp.frankki.app
-- **Registry name:** `app.frankki/frankki`
+- **Registry name:** `app.frankki/letters` (server.json name; registry listing pending)
 
 ---
 
