@@ -1,0 +1,18 @@
+Scope of the MIT license in this repository
+===========================================
+
+The MIT license in LICENSE covers what is actually in this repository: the
+documentation, examples, manifests (server.json, glama.json) and the changelog.
+
+The hosted FrankKi MCP server at https://mcp.frankki.app and the FrankKi
+platform behind it are proprietary services. They are not distributed here and
+are not covered by that license. Use of the service is governed by the terms at
+https://frankki.app.
+
+This note lives in NOTICE rather than in LICENSE on purpose. GitHub detects a
+license by matching the text of LICENSE against a known license. Appending an
+extra paragraph, even a clarifying one, drops the match below the detector's
+confidence threshold, and the repository is then reported as "other" with SPDX
+NOASSERTION. Downstream directories read that field: at least one of them grades
+an undetected license as a failure and blocks installation on it. Keep LICENSE
+byte-for-byte MIT and put clarifications here.
