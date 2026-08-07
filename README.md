@@ -42,7 +42,7 @@ This is the official Model Context Protocol (MCP) server for [**FrankKi**](https
 
 FrankKi MCP is the agent-native interface to [FrankKi](https://frankki.app)'s physical mail infrastructure. FrankKi composes, prints, and physically mails letters. This server exposes that capability to software: your model drafts a letter and sends it, and a real document arrives at the recipient's address.
 
-Delivery is **worldwide**, handled by Deutsche Post together with local postal partners in each destination country. It is primarily a **B2B and developer product**: if you are building an assistant, an ops automation, or a backend that needs to produce and dispatch physical correspondence, this is your physical-output layer.
+Delivery is **worldwide**, handled by our postal partners in each destination country. It is primarily a **B2B and developer product**: if you are building an assistant, an ops automation, or a backend that needs to produce and dispatch physical correspondence, this is your physical-output layer.
 
 ## Why physical mail via MCP?
 
@@ -141,7 +141,7 @@ Step-by-step guides for Cursor, VS Code, Windsurf, Zed, the OpenAI Agents SDK, a
 The server is standard **streamable HTTP** MCP. Discovery, endpoint, and auth in one place:
 
 - **Endpoint:** `https://mcp.frankki.app`
-- **Registry name:** `app.frankki/letters` (server.json name; registry listing pending)
+- **Registry name:** `app.frankki/letters` (published in the Official MCP Registry, version 1.0.0)
 - **Auth metadata:** `https://mcp.frankki.app/.well-known/oauth-authorization-server` (OAuth 2.1, dynamic client registration) or a static bearer API key
 - **Machine-readable overview:** `https://frankki.app/llms.txt`
 
@@ -228,7 +228,7 @@ Enterprise and EU-grade, for teams that need it:
 1. Your agent calls `letter_create_draft` with the text and a recipient. FrankKi renders a professionally formatted document.
 2. `shipping_quote` returns the exact cost for that destination. The agent, or a human via the approval queue, confirms.
 3. `order_send` charges the prepaid wallet atomically and hands the job to fulfillment.
-4. FrankKi prints the letter and hands it off for delivery worldwide via Deutsche Post and local postal partners.
+4. FrankKi prints the letter and hands it off for delivery worldwide via our postal partners.
 5. Status flows back through `order_status`: printed, posted, and, where supported, delivered. `order_einlieferungsbeleg` returns the posting receipt.
 
 ## Discovery and server manifest
@@ -273,7 +273,7 @@ Yes, FrankKi also exposes a REST API. The MCP server is the agent-native front d
 - **MCP for humans and agents:** https://frankki.app/mcp · https://frankki.app/en/mcp
 - **Machine-readable overview:** https://frankki.app/llms.txt
 - **Endpoint:** https://mcp.frankki.app
-- **Registry name:** `app.frankki/letters` (server.json name; registry listing pending)
+- **Registry name:** `app.frankki/letters` (published in the Official MCP Registry, version 1.0.0)
 
 ---
 

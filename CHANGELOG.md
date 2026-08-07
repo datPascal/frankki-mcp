@@ -15,6 +15,12 @@ Notable changes to the FrankKi MCP server and this repository. The authoritative
 - OAuth 2.1 with dynamic client registration verified live on the connect host, alongside scoped API keys.
 - Tool reference completed to cover all **63 registered tools**. 54 are listed for every account; 9 sit behind a rollout flag and are absent from `tools/list` while it is off (marked in [docs/tools.md](docs/tools.md)).
 
+## 2026-08-07: Listed in the Official MCP Registry
+
+- **`app.frankki/letters@1.0.0` is published** and resolves at `registry.modelcontextprotocol.io`, status `active`. The entry carries one remote: `https://mcp.frankki.app`, transport `streamable-http`. Namespace ownership is proven by an Ed25519 apex TXT record on `frankki.app`.
+- Every "registry listing pending" qualifier in this repo is gone, because it is no longer true.
+- Delivery wording corrected across the README and `llms.txt`: mail is carried by our postal partners in each destination country, never a single named carrier.
+
 ## 2026-08-06: Nothing dark
 
 - Every rollout flag that gated a tool is now on in production (`structured_documents`, `letter_design_v2`, `billing_suite`, `brand_import`, `onboarding_cards`). The count is **64 registered, 64 listed, 0 dark**, superseding the 63 / 54 / 9 split recorded on 2026-08-05. [docs/tools.md](docs/tools.md) carries no rollout markers any more.
