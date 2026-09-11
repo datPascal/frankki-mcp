@@ -107,7 +107,7 @@ Composition is text-first: you provide content and a recipient, FrankKi produces
 |------|-------|--------|--------------|
 | `approval_submit` | `order:send` | write | Route a letter into the four-eyes approval queue instead of sending directly. A human reviews the rendered letter and price before anything is printed. |
 | `approval_list` | `approval:read` | read | List pending and decided approval items. |
-| `approval_decide` | `approval:decide` | write | Approve or reject a queued letter. Typically reserved for human-operated sessions; every decision is logged. |
+| `approval_decide` | `approval:decide` | write | Reject a queued letter. Agent approval additionally requires the explicit OAuth-only `approval:self_approve` grant. See [release status](authentication.md#agent-self-approval). |
 
 ## Clients (Mandanten)
 
@@ -166,7 +166,7 @@ address_validate ──► letter_create_draft ──► shipping_quote ──�
 1. Validate the recipient (`address_validate`).
 2. Draft and preview (`letter_create_draft`).
 3. Price it (`shipping_quote`). Never hardcode prices.
-4. Send (`order_send`, ideally with `maxCostEuros`), or route through `approval_submit` for a human check.
+4. Submit with `maxCostEuros` to the approval queue. Choose `approval_submit` when the client supports an embedded preview, or `order_send` for the plain flow. Always display the returned `approvalUrl` for the user to decide in the signed-in portal. Do not create a second approval for an already queued send. Agent approval requires the separate OAuth self-approval grant.
 5. Track (`order_status`), fetch the receipt (`order_einlieferungsbeleg`).
 
 ## Error model

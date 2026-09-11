@@ -206,7 +206,7 @@ Always call `shipping_quote` for the live, exact figure before `order_send`. Pri
 Sending physical mail is irreversible and costs money, so the platform is cautious by default:
 
 - **Honest annotations.** `order_send` and `order_send_batch` are annotated as destructive; read tools as read-only. Your agent can gate on this, and `order_send` accepts a `maxCostEuros` cap that aborts the send if the live price exceeds it.
-- **Approval queue.** Route sensitive letters through `approval_submit` for a **four-eyes** human check before anything is printed. Every decision is logged.
+- **Approval before dispatch.** Sends enter the approval queue. The user decides in the signed-in portal through the returned approval link. The prepared OAuth hardening allows agent approval only after a separate, explicit self-approval grant. See [the authorization contract and release status](docs/authentication.md#agent-self-approval).
 - **Per-key spending limits and tool scopes.** Cap what an automated key can spend, and restrict which tools it may call.
 - **Preview before commit.** `letter_create_draft` returns a rendered preview and `shipping_quote` returns the cost, so an agent or a human can confirm before `order_send`.
 
@@ -227,7 +227,7 @@ Enterprise and EU-grade, for teams that need it:
 
 1. Your agent calls `letter_create_draft` with the text and a recipient. FrankKi renders a professionally formatted document.
 2. `shipping_quote` returns the exact cost for that destination. The agent, or a human via the approval queue, confirms.
-3. `order_send` charges the prepaid wallet atomically and hands the job to fulfillment.
+3. `order_send` queues the letter for approval. Show its approval link to the user; fulfillment follows an authorized decision.
 4. FrankKi prints the letter and hands it off for delivery worldwide via our postal partners.
 5. Status flows back through `order_status`: printed, posted, and, where supported, delivered. `order_einlieferungsbeleg` returns the posting receipt.
 
