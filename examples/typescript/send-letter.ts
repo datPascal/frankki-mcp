@@ -3,7 +3,7 @@
  * and (optionally) send it as real physical mail.
  *
  * Run:
- *   export FRANKKI_API_KEY=sk_sandbox_...   # sandbox key: full flow, no real mail
+ *   export FRANKKI_API_KEY=...   # key from frankki.app/mcp; without SEND_FOR_REAL nothing is mailed or charged
  *   npm install && npm start
  *
  * Get a key at https://frankki.app/mcp

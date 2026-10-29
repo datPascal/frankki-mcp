@@ -2,7 +2,7 @@
 and (optionally) send it as real physical mail.
 
 Run:
-    export FRANKKI_API_KEY=sk_sandbox_...   # sandbox key: full flow, no real mail
+    export FRANKKI_API_KEY=...   # key from frankki.app/mcp; without SEND_FOR_REAL nothing is mailed or charged
     pip install -r requirements.txt
     python send_letter.py
 

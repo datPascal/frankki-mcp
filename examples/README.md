@@ -7,6 +7,6 @@ Minimal, runnable clients for the hosted FrankKi MCP server. Each one walks the 
 | [`typescript/`](typescript/) | Node 18+, `@modelcontextprotocol/sdk` | `npm install && npm start` |
 | [`python/`](python/) | Python 3.10+, `mcp` | `pip install -r requirements.txt && python send_letter.py` |
 
-Both need a `FRANKKI_API_KEY` environment variable. Use a **sandbox key** (issued at [frankki.app/mcp](https://frankki.app/mcp)) to run the full flow with a funded test wallet and zero real mail. The send step is off by default (`SEND_FOR_REAL = false`) either way.
+Both need a `FRANKKI_API_KEY` environment variable. Issue a key at [frankki.app/mcp](https://frankki.app/mcp). Regular accounts have no sandbox; the examples run the flow as a dry run (rendered preview and exact price, nothing printed, nothing charged). The send step is off by default (`SEND_FOR_REAL = false`).
 
 Using Claude Desktop, Cursor, or another MCP client instead of the SDK? See [docs/clients.md](../docs/clients.md); there is nothing to code at all.

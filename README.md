@@ -28,7 +28,7 @@ This is the official Model Context Protocol (MCP) server for [**FrankKi**](https
 - [Authentication](#authentication)
 - [Wallet and pricing](#wallet-and-pricing)
 - [Safety and human-in-the-loop](#safety-and-human-in-the-loop)
-- [Sandbox](#sandbox)
+- [Testing without mailing](#testing-without-mailing)
 - [Compliance](#compliance)
 - [How a send actually works](#how-a-send-actually-works)
 - [Discovery and server manifest](#discovery-and-server-manifest)
@@ -83,19 +83,15 @@ Composition is text-first: you provide the letter content and the recipient, and
 
 You do not clone or self-host anything. The FrankKi MCP server is hosted. You point your MCP client at it and authenticate.
 
-**1. Get access.** Create a partner account and issue a key from the dashboard at **[frankki.app/mcp](https://frankki.app/mcp)**. Fund your wallet, or use the [sandbox](#sandbox) first (no real mail).
+**1. Get access.** Create a partner account and issue a key from the dashboard at **[frankki.app/mcp](https://frankki.app/mcp)**. Fund your wallet (top-ups from 10 to 500 EUR each). You can [test without mailing anything](#testing-without-mailing) first.
 
-**2a. Claude Desktop and clients with native remote support.** Add a custom connector pointing at the endpoint. OAuth runs in your browser on first use:
+**2a. Claude (claude.ai and Claude Desktop) and clients with native remote support.** Add a custom connector: Customize > Connectors > "+ Add" > "Add custom connector", name it FrankKi, URL `https://mcp.frankki.app`, then under Authentication choose "Sign in now". OAuth runs in your browser: sign in with your FrankKi account or create one there. Claude Code:
 
-```json
-{
-  "mcpServers": {
-    "frankki": {
-      "url": "https://mcp.frankki.app"
-    }
-  }
-}
+```bash
+claude mcp add --transport http frankki https://mcp.frankki.app
 ```
+
+Then run `/mcp` in Claude Code to sign in.
 
 **2b. Clients that only speak stdio** (older Claude Desktop, some Cursor setups). Bridge with `mcp-remote`:
 
@@ -195,7 +191,9 @@ Two modes, pick per client:
 
 FrankKi runs on a **prepaid wallet**. You top it up (via Stripe), and each send draws from the balance. No surprise post-paid invoices, and an out-of-credit agent simply cannot spend.
 
-- Pricing depends on the **destination country**. A domestic letter within Germany starts at **3,49 EUR**; international sends are priced per destination.
+- Pricing depends on the **destination country** and your monthly volume. A standard black-and-white letter within Germany costs **1,99 EUR** below 20 letters a month, then 1,89 EUR from 20, 1,79 EUR from 100, 1,69 EUR from 500 and **1,59 EUR from 1,000** letters a month (the reached tier applies to every letter that month). International sends are priced per destination.
+- Top-ups are 10 to 500 EUR each. The balance does not expire and there is no subscription.
+- FrankKi is a small business under § 19 UStG and shows no VAT: the price you see is the final price.
 - Registered mail and other service levels are available where the destination supports them.
 - Volume tiers (**Staffelpreise**) reduce the per-letter price at scale.
 
@@ -210,9 +208,9 @@ Sending physical mail is irreversible and costs money, so the platform is cautio
 - **Per-key spending limits and tool scopes.** Cap what an automated key can spend, and restrict which tools it may call.
 - **Preview before commit.** `letter_create_draft` returns a rendered preview and `shipping_quote` returns the cost, so an agent or a human can confirm before `order_send`.
 
-## Sandbox
+## Testing without mailing
 
-Test the full flow without mailing anything. Request a **sandbox key** from the dashboard, point at the same endpoint, and you get a funded test wallet. Composition, pricing, and status all behave like production, but no paper is printed and no charge is made. Build and demo your integration end to end, then swap in a live key.
+Regular accounts have no separate sandbox. Drafts, previews, quotes and `order_send` with `dryRun: true` are free: you get the rendered pages and the exact price, nothing is printed and nothing is charged. A dry run needs a sender profile and the signed data processing agreement (AVV), the same as a real send. Only a letter you approve draws from your wallet.
 
 ## Compliance
 
@@ -245,7 +243,7 @@ Found this server through an MCP directory? The canonical source of truth is alw
 | [docs/authentication.md](docs/authentication.md) | OAuth 2.1, API keys, the full scope list, recommended setups |
 | [docs/clients.md](docs/clients.md) | Setup for Claude Desktop, Claude Code, Cursor, VS Code, Windsurf, Zed, OpenAI Agents SDK, LangChain |
 | [docs/use-cases.md](docs/use-cases.md) | Dunning, terminations, compliance mail, onboarding, agent-native products |
-| [examples/](examples/) | Runnable TypeScript and Python clients (sandbox-first, send behind an explicit flag) |
+| [examples/](examples/) | Runnable TypeScript and Python clients (dry run first, send behind an explicit flag) |
 
 ## FAQ
 
@@ -262,7 +260,7 @@ No. FrankKi hosts it. This repo is documentation, `server.json`, and examples. Y
 Primarily B2B and developer use: agents, backends, and automated workflows that need to dispatch physical mail at scale.
 
 **What if my agent goes rogue?**
-It cannot spend beyond the wallet balance or a key's spending limit, sensitive letters can be forced through a human approval queue, and destructive tools are clearly annotated. Start in the [sandbox](#sandbox).
+It cannot spend beyond the wallet balance or a key's spending limit, sensitive letters can be forced through a human approval queue, and destructive tools are clearly annotated. Start with [a dry run](#testing-without-mailing).
 
 **Is there an API without MCP?**
 Yes, FrankKi also exposes a REST API. The MCP server is the agent-native front door. See **[frankki.app/mcp](https://frankki.app/mcp)**.
