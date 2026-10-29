@@ -7,7 +7,7 @@ Key facts:
 - Registry name: app.frankki/letters (published in the Official MCP Registry, version 1.0.0)
 - Auth: OAuth 2.1 with dynamic client registration, or API key as bearer token
 - OAuth metadata: https://mcp.frankki.app/.well-known/oauth-authorization-server
-- Billing: prepaid wallet (Stripe top-up); a German domestic letter starts at 3,49 EUR, international priced per destination; call shipping_quote for live prices
+- Billing: prepaid wallet (Stripe top-up); a German standard letter costs 1,99 EUR below 20 letters a month down to 1,59 EUR from 1,000 (volume ladder), top-ups 10 to 500 EUR, no VAT shown (§ 19 UStG), international priced per destination; call shipping_quote for live prices
 - Safety: per-key scopes and spending limits, maxCostEuros guard on sends, four-eyes human approval queue, sandbox mode with no real mail
 - Compliance: GoBD archiving, DATEV/DMS export, GDPR (EU data processing), German and English
 - Composition: text-first; FrankKi renders DIN 5008 letters; attachments supported; arbitrary pre-rendered PDFs as the letter are not supported

@@ -206,4 +206,4 @@ Once connected, ask your model:
 
 > Validate this address, draft a short formal letter to it, quote the price for standard delivery, and stop before sending so I can review.
 
-Safe by construction: drafting and quoting are read-mostly. Nothing is printed until `order_send` runs, and you can start with a [sandbox key](../README.md#sandbox) where even that mails nothing.
+Safe by construction: drafting and quoting are read-mostly. Nothing is printed until `order_send` runs, and `order_send` with `dryRun: true` returns the preview and exact price without mailing or charging anything ([details](../README.md#testing-without-mailing)).

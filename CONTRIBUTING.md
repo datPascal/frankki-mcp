@@ -11,7 +11,7 @@ Contributions that are very welcome here:
 How:
 
 1. Fork, branch, make the change.
-2. Keep examples runnable against a sandbox key with no real mail sent by default.
+2. Keep examples runnable with no real mail sent by default (dry run, `SEND_FOR_REAL = false`).
 3. Open a PR with a one-paragraph description.
 
 For anything about the service itself (feature requests, account issues, bugs in the hosted server), use the dashboard at [frankki.app/mcp](https://frankki.app/mcp) or email support@frankki.app. Security issues: see [SECURITY.md](SECURITY.md), never a public issue.
