@@ -77,7 +77,7 @@ The server exposes a focused, scoped tool set. The core send flow:
 
 Beyond the core flow there are tools for attachments, letterheads and signatures, sender profiles, send presets, scheduled sends, order cancellation, posting receipts (Einlieferungsbeleg), client (Mandanten) lookups, and GoBD/DATEV archive exports. The full list with scopes and side effects: **[docs/tools.md](docs/tools.md)**. The authoritative, versioned list is always what the server returns from the MCP `tools/list` method.
 
-Composition is text-first: you provide the letter content and the recipient, and FrankKi produces the correctly laid-out document (DIN 5008 by default). Attachments are supported. Sending a pre-rendered arbitrary PDF is intentionally not part of the platform.
+By default you provide the letter content and the recipient, and FrankKi lays out the document to DIN 5008. Attachments are supported. A finished letter PDF of your own also works: `letter_upload_pdf` checks that the address sits where the post reads it, and `order_send` with `pdfStorageKey` sends it unchanged.
 
 ## Quick start for humans
 

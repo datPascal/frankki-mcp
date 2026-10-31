@@ -2,6 +2,12 @@
 
 Notable changes to the FrankKi MCP server and this repository. The authoritative tool list is always the server's `tools/list` response.
 
+## 2026-10-31: Send your own letter PDF
+
+- New tool `letter_upload_pdf`. Upload a finished letter PDF and FrankKi sends it as it is, with no rebuild. It checks the address position for the delivery method. For a standard letter the address sits 60 to 85.5 mm from the top, for Einschreiben 68 to 85.5 mm, in both cases 22 to 107.5 mm from the left. The rest of the window area, the 5 mm edges and the bottom-left corner have to stay clear, and every page is A4 portrait. Each problem comes back with the millimetres to move, plus page 1 with the zones drawn in.
+- `order_send` takes `pdfStorageKey` together with the recipient fields. The same check runs at send time and stops with `PDF_LAYOUT_INVALID` before anything is charged.
+- `PDF_LETTER_UNSUPPORTED` now only answers paths that take no PDF letter.
+
 ## 2026-07: Public documentation
 
 - Full tool reference published ([docs/tools.md](docs/tools.md)): composition, pricing, sending, batch, scheduling, approvals, tracking, compliance exports.

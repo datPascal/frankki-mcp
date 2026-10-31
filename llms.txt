@@ -10,7 +10,7 @@ Key facts:
 - Billing: prepaid wallet (Stripe top-up); a German standard letter costs 1,99 EUR below 20 letters a month down to 1,59 EUR from 1,000 (volume ladder), top-ups 10 to 500 EUR, no VAT shown (§ 19 UStG), international priced per destination; call shipping_quote for live prices
 - Safety: per-key scopes and spending limits, maxCostEuros guard on sends, four-eyes human approval queue, sandbox mode with no real mail
 - Compliance: GoBD archiving, DATEV/DMS export, GDPR (EU data processing), German and English
-- Composition: text-first; FrankKi renders DIN 5008 letters; attachments supported; arbitrary pre-rendered PDFs as the letter are not supported
+- Composition: FrankKi renders DIN 5008 letters from text; attachments supported; a finished letter PDF can be sent as it is via letter_upload_pdf (address-position check) then order_send with pdfStorageKey
 - Audience: B2B and developers (agents, backends, automated workflows); consumer app available on iOS
 
 ## Docs

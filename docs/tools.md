@@ -76,10 +76,11 @@ The template authoring chain is: `template_get` → edit → `letter_preview` �
 | `letter_list` | `letter:read` | read | List letters on the account, filterable by status. |
 | `letter_search` | `letter:read` | read | Full-text search across the account's letters. |
 | `attachment_upload_pdf` | `order:send` | write | Attach a PDF (by URL or Base64) to a draft. Attachments are printed after the letter body. |
+| `letter_upload_pdf` | `order:send` | write | Upload a finished letter PDF you made yourself (by URL or Base64), to be sent as it is. FrankKi checks where the address sits for the chosen delivery method and returns `pdfStorageKey`, each problem with the millimetres to move, and page 1 with the zones drawn in. Free. |
 | `attachment_upload_image` | `order:send` | write | Attach an image (by URL or Base64, with rotation) to a draft. |
 | `letter_preview` | `order:send` | read | Compose a letter exactly as a real send would and return inline PNGs, a PDF link, page count, price and `designRender` (actual `documentMode`, drawn elements, `bodyStartMm`). The preview is free and the letter is not sent. Takes a `letterId`, or inline `content` **or** `blocks`. |
 
-Composition is text-first: you provide content and a recipient, FrankKi produces the document. Sending a pre-rendered arbitrary PDF as the letter itself is intentionally not part of the platform; attachments ride along with a composed letter.
+By default FrankKi lays out the letter from your content and recipient. If you already have the finished letter as a PDF, upload it with `letter_upload_pdf` and pass the returned `pdfStorageKey` to `order_send`, with the recipient fields exactly as printed. FrankKi prints that PDF unchanged, so the address has to be where the post reads it. For a standard letter the address sits 60 to 85.5 mm from the top, for Einschreiben 68 to 85.5 mm, in both cases 22 to 107.5 mm from the left. Nothing else may print in the window area, 20 to 109.5 mm from the left and 40 to 87.5 mm from the top, and that includes a return-address line above the address. Every page is A4 portrait with 5 mm clear at each edge. The printed postcode and city must match the recipient fields. If a check fails, fix the PDF and upload it again.
 
 ## Pricing and sending
 
@@ -179,4 +180,5 @@ Errors follow the standard MCP error shape with stable, machine-readable codes. 
 | `RATE_LIMITED` | Too many requests | Back off and retry with jitter |
 | `DAILY_CAP_EXCEEDED` | Key's daily spend limit reached | Stop sending; a human raised limit is required |
 | `SCOPE_MISSING` | Key lacks the required scope | Do not retry; the key must be re-issued with the scope |
-| `PDF_LETTER_UNSUPPORTED` | Attempt to send a pre-rendered PDF as the letter | Compose text-first instead; PDFs are supported as attachments |
+| `PDF_LETTER_UNSUPPORTED` | A finished PDF sent through a path that takes none | Upload it with `letter_upload_pdf` and send with `order_send` and `pdfStorageKey` |
+| `PDF_LAYOUT_INVALID` | The uploaded PDF does not fit the print layout, for example the address sits outside its zone | Apply each `data.findings[].fix`, upload again, and send with the new `pdfStorageKey` |
